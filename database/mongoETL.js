@@ -1,26 +1,27 @@
 const mongoose = require('mongoose');
+const connect = mongoose.connect('mongodb://localhost:3000/products');
 
-let features = mongoose.Schema({
+let featuresSchema = mongoose.Schema({
   _id: 'number',
   product_id: 'number',
   fabric: 'string',
   canvas: 'string'
 });
 
-let related = mongoose.Schema({
+let relatedSchema = mongoose.Schema({
   product_id: 'number',
   current_product_id: 'number',
   related_product_id: 'number'
 });
 
-let skus = mongoose.Schema({
+let skusSchema = mongoose.Schema({
   _id: 'number',
   style_id: 'number',
   size: 'string',
   quantity: 'number'
 });
 
-let styles = mongoose.Schema({
+let stylesSchema = mongoose.Schema({
   _id: 'number',
   product_id: 'number',
   name: 'string',
@@ -29,14 +30,14 @@ let styles = mongoose.Schema({
   default_style: 'boolean'
 });
 
-let photos = mongoose.Schema({
+let photosSchema = mongoose.Schema({
   _id: 'number',
   style_id: 'number',
   url: 'string',
   thumbnail_url: 'number'
 });
 
-let products = mongoose.Schema({
+let productsSchema = mongoose.Schema({
   _id: 'number',
   name: 'string',
   slogan: 'string',
@@ -44,3 +45,10 @@ let products = mongoose.Schema({
   category: 'string',
   default_price: 'number'
 });
+
+let Features = mongoose.model('features');
+let Related = mongoose.model('related');
+let Skus = mongoose.model('skus');
+let Styles = mongoose.model('styles');
+let Photos = mongoose.model('photos');
+let Products = mongoose.model('products');
