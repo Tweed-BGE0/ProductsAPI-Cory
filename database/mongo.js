@@ -38,7 +38,9 @@ let photos = mongoose.Schema({
 
 let products = mongoose.Schema({
   _id: 'number',
-  product_id: 'number',
-  fabric: 'string',
-  canvas: 'string'
+  name: 'string',
+  slogan: 'string',
+  description: 'string',
+  category: 'string',
+  default_price: 'number'
 });
