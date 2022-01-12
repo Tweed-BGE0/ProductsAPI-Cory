@@ -1,5 +1,7 @@
 
-CREATE DATABASE "productstest";
+CREATE DATABASE "products";
+
+DROP TABLE IF EXISTS "products";
 
 CREATE TABLE "products" (
   id serial,
@@ -11,6 +13,8 @@ CREATE TABLE "products" (
   PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS "features";
+
 CREATE TABLE "features" (
   id serial ,
   product_id INT,
@@ -19,12 +23,15 @@ CREATE TABLE "features" (
   PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS "related";
+
 CREATE TABLE "related" (
   product_id serial,
   current_product_id INT,
   related_product_id INT
 );
 
+DROP TABLE IF EXISTS "styles";
 
 CREATE TABLE "styles" (
   id serial,
@@ -36,6 +43,8 @@ CREATE TABLE "styles" (
   PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS "skus";
+
 CREATE TABLE "skus" (
   id serial ,
   style_id INT,
@@ -43,6 +52,8 @@ CREATE TABLE "skus" (
   quantity INT,
   PRIMARY KEY(id)
 );
+
+DROP TABLE IF EXISTS "photos";
 
 CREATE TABLE "photos" (
   id serial ,
