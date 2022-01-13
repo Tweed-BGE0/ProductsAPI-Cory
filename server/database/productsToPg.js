@@ -31,15 +31,49 @@ async function processLineByLine() {
   var readHeader = false
   var counter = 0;
   var query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';
+
   for await (const line of rl) {
     // Each line in input.txt will be successively available here as line.
     if (!readHeader) {
-      readHeader= true;
+      readHeader = true;
       continue;
     }
 
     if (counter >= 65000) {
       query = query.slice( 0, query.length -1)
+     // console.log('QUERY', query)
+      try{
+        const client = await pool.connect()
+        await client.query(query)
+        await client.release();
+        console.log('Batched')
+      } catch(err) {
+        console.log(' q failed', err, query)
+        throw new Error('failure')
+      }
+      query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';
+      counter = 0;
+    }
+
+    let split = line.split(/,(?=(?:(?:[^“]*“){2})*[^“]*$)/);
+    var id = split[0]
+    var name =  split[1].replace(/['"]+/g, '')
+    var slogan = split[2].replace(/['"]+/g, '')
+    var description = split[3].replace(/['"]+/g, '')
+    var category = split[4].replace(/['"]+/g, '')
+    var default_price = split[5].replace('"default_price": ', '')
+
+    counter++;
+    var temp = `(${id}, '${name}', '${slogan}', '${description}', '${category}', ${default_price}),`
+    if (split.length <= 6) {
+      // if problem skip record
+      query += temp
+    } else {
+      console.log('PROBLEMO:', temp)
+    }
+  }
+  if (counter !==0) {
+    query = query.slice( 0, query.length -1)
      // console.log('QUERY', query)
       try{
         const client = await pool.connect()
@@ -51,35 +85,8 @@ async function processLineByLine() {
       }
       query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';
       counter = 0;
-    }
-    let split = line.split(',');
-    var id = split[0]
-    var name =  split[1].replace(/['"]+/g, '')
-    var slogan = split[2].replace(/['"]+/g, '')
-    var description = split[3].replace(/['"]+/g, '')
-    var category = split[4].replace(/['"]+/g, '')
-    var default_price = split[5].replace('"default_price": ', '')
-
-
-
-    counter++;
-    var temp = `(${id}, '${name}', '${slogan}', '${description}', '${category}', ${default_price}),`
-    if (split.length <= 6) {
-      // if problem skip record
-      query += temp
-    } else {
-
-      console.log('PROBLEMO:', temp)
-    }
-
-    if (line.includes('"id"') ) {
-      console.log('line:::::',line)
-    }
-
-
   }
-  fileStream.close()
-console.log('finish')
+
 }
 
 processLineByLine();
