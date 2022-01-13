@@ -55,9 +55,9 @@ async function processLineByLine() {
       query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';
       counter = 0;
     }
-   // line.replace('"default_price": ', '')
+    line.replace('"default_price": ', '')
     let split = parse(line);
-    if (split.length === 4 ){
+    if (split.length === 5){
 
       console.log(split)
     }

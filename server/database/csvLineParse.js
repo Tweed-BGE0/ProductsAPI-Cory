@@ -5,6 +5,7 @@ const parseLine = (string) => {
      var result = [];
      var reset = false;
      for (var i = 0; i < string.length; i++) {
+      console.log(string)
        if (reset) {
          i = 0;
          reset = false;
@@ -19,7 +20,8 @@ const parseLine = (string) => {
           if (string[j] === '"') {
              result.push(string.slice(i+1, j));
              string = string.slice(j+2);
-             console.log('newstring:::', string)
+             console.log('newstring', string)
+             i=-1
              reset = true
              break;
             }
@@ -28,8 +30,9 @@ const parseLine = (string) => {
         } else if (string[i] === ',') {
             result.push(string.slice(0, i))
             string = string.slice(i+1)
+            i=-1
             reset = true
-          } else if (i === string.length-1 && string.length > 0) {
+          } else if (i === string.length -1 && string.length > 0) {
             result.push(string.slice(0))
           }
 
@@ -39,15 +42,16 @@ const parseLine = (string) => {
 
     module.exports = parseLine
 
-
-
-    var x ='64750,"Kenneth 350 Sunglasses","Qui cumque magni in.","Tempora qui hic iusto nobis nihil reprehenderit voluptatem. Aut cum sit ea corrupti quae qui in eum alias. Et optio sit quod et non ea. Placeat eaque est voluptatem est iste sint. Maiores nesciunt voluptatem delectus porro.","Sunglasses",93'
-    console.log(parseLine(x), parseLine(x).length)
     /*
+    var x = '64713,"Orie Shorts","Provident labore officia ullam odit odio occaecati voluptas.","Veritatis a aut. Eius et fugit rem. Eos quia consectetur asperiores aliquam.","Shorts",8'
+
+    console.log(parseLine(x))
+
+        var x ='64750,"Kenneth 350 Sunglasses","Qui cumque magni in.","Tempora qui hic iusto nobis nihil reprehenderit voluptatem. Aut cum sit ea corrupti quae qui in eum alias. Et optio sit quod et non ea. Placeat eaque est voluptatem est iste sint. Maiores nesciunt voluptatem delectus porro.","Sunglasses",93'
+        console.log(parseLine(x), parseLine(x).length)
     var x = '1993957,898628,"Fabric","FullControlSkin"'
     var y = '1993958,898629,"Green Leaf Certified",null'
 
-    console.log(parseLine(x))
     console.log(parseLine(y))
 
     64749,"Cristobal Skirt","Aut dolorem voluptatum tenetur consequatur porro aut.","Consequuntur eius consequatur odio sit provident. Rerum minima dolore quo similique impedit officia voluptas. Sunt sed quod enim iste rerum repellendus. Nobis ut nobis sit non id corporis corrupti modi doloribus. Vel reprehenderit quam autem. Quibusdam exercitationem ducimus ad iste veritatis dolor aut natus maiores.","Skirt",6
