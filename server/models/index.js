@@ -6,7 +6,6 @@ module.exports= {
       const client = await pool.connect()
       await client.query(query)
       await client.release();
-      console.log('Batched')
     } catch(err) {
       console.log(' query failed', err)
       throw new Error('query failed')
