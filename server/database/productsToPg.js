@@ -47,26 +47,23 @@ async function processLineByLine() {
         const client = await pool.connect()
         await client.query(query)
         await client.release();
-        console.log('Batched')
+        console.log('Batched products')
       } catch(err) {
-        console.log(' q failed', err)
+        console.log(' q failed', err, query)
         throw new Error('failure')
       }
       query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';
       counter = 0;
     }
-    line.replace('"default_price": ', '')
-    let split = parse(line);
-    if (split.length === 5){
-
-      console.log(split)
-    }
+    let l = line
+    l.replace(/'/g, "\\'");
+    let split = parse(l.replace('"default_price": ', ''));
 
     var id = split[0]
-    var name =  split[1]
-    var slogan = split[2]
-    var description = split[3]
-    var category = split[4]
+    var name =  split[1].replace(/'/g, "''")
+    var slogan = split[2].replace(/'/g, "''")
+    var description = split[3].replace(/'/g, "''")
+    var category = split[4].replace(/'/g, "''")
     var default_price = split[5]
 
     counter++;
@@ -85,6 +82,7 @@ async function processLineByLine() {
         const client = await pool.connect()
         await client.query(query)
         await client.release();
+        console.log('last BATCHED product')
       } catch(err) {
         console.log(' q failed', err)
         throw new Error('failure')

@@ -30,7 +30,7 @@ async function processLineByLine(path, tableName, columnNames) {
       db.connectAndQuery(query)
       query = `INSERT INTO ${tableName}(${columnNames.join(',')}) VALUES `;
       counter = 0;
-      console.log('BATCHED')
+      console.log('BATCHED features')
     }
     //tried to write as modular as possible to easily use on other transfers, but still have to custom split and build temp
     let split = parse(line)
@@ -51,6 +51,7 @@ async function processLineByLine(path, tableName, columnNames) {
   if (counter !==0) {
     query = query.slice( 0, query.length -1)
     db.connectAndQuery(query);
+    console.log('last BATCHED features')
   }
 
 }
