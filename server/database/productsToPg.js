@@ -1,6 +1,7 @@
 const fs = require('fs');
 const readline = require('readline');
-const pool = require('./index.js')
+const pool = require('./index.js');
+const parse = require('./csvLineParse.js');
 
 //scan thru && identify errors or correct errors/inconsistant data
 // run data thru schemas and store in database
@@ -48,20 +49,25 @@ async function processLineByLine() {
         await client.release();
         console.log('Batched')
       } catch(err) {
-        console.log(' q failed', err, query)
+        console.log(' q failed', err)
         throw new Error('failure')
       }
       query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';
       counter = 0;
     }
+   // line.replace('"default_price": ', '')
+    let split = parse(line);
+    if (split.length === 4 ){
 
-    let split = line.split(/,(?=(?:(?:[^“]*“){2})*[^“]*$)/);
+      console.log(split)
+    }
+
     var id = split[0]
-    var name =  split[1].replace(/['"]+/g, '')
-    var slogan = split[2].replace(/['"]+/g, '')
-    var description = split[3].replace(/['"]+/g, '')
-    var category = split[4].replace(/['"]+/g, '')
-    var default_price = split[5].replace('"default_price": ', '')
+    var name =  split[1]
+    var slogan = split[2]
+    var description = split[3]
+    var category = split[4]
+    var default_price = split[5]
 
     counter++;
     var temp = `(${id}, '${name}', '${slogan}', '${description}', '${category}', ${default_price}),`
@@ -80,7 +86,7 @@ async function processLineByLine() {
         await client.query(query)
         await client.release();
       } catch(err) {
-        console.log(' q failed', err, query)
+        console.log(' q failed', err)
         throw new Error('failure')
       }
       query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';

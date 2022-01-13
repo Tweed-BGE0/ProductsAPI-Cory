@@ -2,7 +2,7 @@ const fs = require('fs');
 const readline = require('readline');
 const pool = require('./index.js')
 const db = require('../models')
-
+const parse = require('./csvLineParse.js')
 
 
 
@@ -33,12 +33,12 @@ async function processLineByLine(path, tableName, columnNames) {
       console.log('BATCHED')
     }
     //tried to write as modular as possible to easily use on other transfers, but still have to custom split and build temp
-    let split = line.split(/^[\"\[\]\,\s]$/gi)
-    console.log('SPLIT::', split, split.length)
+    let split = parse(line)
+
     var id = split[0]
     var product_id = split[1]
-    var fabric = split[2].replace(/['"]+/g, '')
-    var canvas = split[3].replace(/['"]+/g, '')
+    var fabric = split[2]
+    var canvas = split[3]
 
     counter++;
     var temp = `(${id}, '${product_id}', '${fabric}', '${canvas}'),`
