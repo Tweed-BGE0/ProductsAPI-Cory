@@ -34,6 +34,7 @@ async function processLineByLine(path, tableName, columnNames) {
     let split = parse(line)
 
     var id = split[0]
+
     var style_id = split[1]
     var url = split[2]
     var thumbnail_url = split[3]
@@ -41,7 +42,7 @@ async function processLineByLine(path, tableName, columnNames) {
     counter++;
     var temp = `(${id}, '${style_id}', '${url}', '${thumbnail_url}'),`
 
-    if (split.length <= 4) {
+    if (split.length <= 4 && id !== '357') {
       query += temp
     } else {
       console.log('PROBLEMO:', temp)

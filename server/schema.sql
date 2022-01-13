@@ -26,7 +26,7 @@ CREATE TABLE features (
 DROP TABLE related CASCADE;
 
 CREATE TABLE related (
-  product_id serial,
+  id serial,
   current_product_id INT,
   related_product_id INT
 );
@@ -65,11 +65,11 @@ CREATE TABLE photos (
 
 
 ALTER TABLE features ADD FOREIGN KEY (product_id) REFERENCES products (id);
+ALTER TABLE styles ADD FOREIGN KEY (product_id) REFERENCES products (id);
 ALTER TABLE related ADD FOREIGN KEY (current_product_id) REFERENCES products (id);
 ALTER TABLE related ADD FOREIGN KEY (related_product_id) REFERENCES products (id);
 
 ALTER TABLE skus ADD FOREIGN KEY (style_id) REFERENCES styles (id);
-ALTER TABLE styles ADD FOREIGN KEY (product_id) REFERENCES products (id);
 ALTER TABLE photos ADD FOREIGN KEY (style_id) REFERENCES styles (id);
 
 
