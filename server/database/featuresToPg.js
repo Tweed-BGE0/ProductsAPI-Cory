@@ -37,11 +37,11 @@ async function processLineByLine(path, tableName, columnNames) {
 
     var id = split[0]
     var product_id = split[1]
-    var fabric = split[2]
-    var canvas = split[3]
+    var feature = split[2]
+    var value = split[3]
 
     counter++;
-    var temp = `(${id}, '${product_id}', '${fabric}', '${canvas}'),`
+    var temp = `(${id}, '${product_id}', '${feature}', '${value}'),`
     if (split.length <= 4) {
       query += temp
     } else {
@@ -56,4 +56,4 @@ async function processLineByLine(path, tableName, columnNames) {
 
 }
 
-processLineByLine('/Users/coryzauss/Projects/sdc/Data/features.csv', 'features', ['id', 'product_id', 'fabric', 'canvas']);
+processLineByLine('/Users/coryzauss/Projects/sdc/Data/features.csv', 'features', ['id', 'product_id', 'feature', 'value']);

@@ -18,8 +18,8 @@ DROP TABLE features CASCADE;
 CREATE TABLE features (
   id serial ,
   product_id INT,
-  fabric VARCHAR,
-  canvas VARCHAR,
+  feature VARCHAR,
+  value VARCHAR,
   PRIMARY KEY(id)
 );
 

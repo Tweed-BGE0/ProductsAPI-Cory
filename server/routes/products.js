@@ -1,16 +1,14 @@
 const controllers = require('../controllers')
 var router = require('express').Router();
 
-// route these endpoints to the correct controller
 
+router.get('/', controllers.getProductsPage);
 
-router.get('/', controllers.getProducts);
+router.get('/:product_id', controllers.getProductById);
 
-router.get('/:product_id', controllers.getById);
+router.get('/:product_id/styles', controllers.getProductStyles);
 
-router.get('/:product_id/styles', controllers.getStyles);
-
-router.get('/:product_id/related', controllers.getRelated);
+router.get('/:product_id/related', controllers.getRelatedProductsIds);
 
 
 module.exports = router;
