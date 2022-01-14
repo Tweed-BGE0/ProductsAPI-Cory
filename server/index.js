@@ -1,15 +1,22 @@
 const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 8080 ;
-const cors = require('cors');
 const axios = require('axios');
+const cors = require('cors');
+const router = require('./routes.js');
+
+const PORT = process.env.PORT || 8080 ;
+
+const app = express();
+module.exports.app = app
 
 app.use(express.json());
+
+//routes
+app.use('/classes', router);
+
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);
 })
-
 
 
 // set up routes and querys
