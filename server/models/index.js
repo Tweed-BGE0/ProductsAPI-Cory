@@ -1,6 +1,8 @@
 const pool = require('../database');
 
-module.exports= {
+//functions to interact and query with database
+
+module.exports = {
   connectAndQuery: async (query) => {
     try{
       const client = await pool.connect()
