@@ -13,12 +13,5 @@ module.exports= {
   }
 }
 
-// module.exports = {
-//   create:  () => {
-//     return new Promise((resolve, reject) => {
-//       let sql = 'INSERT INTO ? VALUES (?)'
-//     })
-//   }
-// }
 
 
