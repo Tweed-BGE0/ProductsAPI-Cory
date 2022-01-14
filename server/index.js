@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-const router = require('./routes.js');
+const productsRoutes = require('./routes/products.js');
 
 const PORT = process.env.PORT || 8080 ;
 
@@ -11,8 +11,11 @@ module.exports.app = app
 app.use(express.json());
 
 //routes
-app.use('/classes', router);
+app.use('/products', productsRoutes);
 
+app.get('/', (req, res) => {
+  
+})
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);
