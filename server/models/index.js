@@ -15,11 +15,11 @@ module.exports = {
     }
   },
   getProductsPage: async (params) => {
-    console.log(params)
+
     var page = params.page || 1;
     var count = params.count || 5;
-    var startId = page == 1 ? 1 : count * page + 1;
-
+    var startId = page == 1 ? 1 : (count * page ) - count + 1 ;
+    
     const client = await pool.connect();
     try {
 
@@ -27,6 +27,7 @@ module.exports = {
       SELECT *
       FROM products
       WHERE id > $1
+      ORDER BY id ASC
       LIMIT $2`;
 
       const { rows } = await client.query(query, [startId, count]);
@@ -116,7 +117,6 @@ module.exports = {
 
       const { rows } = await client.query(query, [id]);
       var result = rows[0].array_agg
-  
       return result;
     } catch (err) {
       console.log(" query failed", err);
