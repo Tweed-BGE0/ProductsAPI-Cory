@@ -13,14 +13,16 @@ module.exports = {
       throw new Error('query failed')
     }
   },
-  getProductsPage: async() => {null},
+  getProductsPage: async({page, count}) => {null},
   getProductById: async(id) => {
     const client = await pool.connect()
     try{
-      console.log(id)
-      const query = 'SELECT id, name, slogan, description, category, default_price FROM products WHERE id = $1 JOIN features;'
-      const {rows} = await client.query(query, [id])
-      return rows;
+      const query = 'SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price FROM products WHERE products.id = $1;'
+      const features = 'SELECT features.feature, features.value FROM features WHERE features.product_id = $1'
+      const productInfo = await client.query(query, [id])
+      const featureInfo = await client.query(features, [id])
+      productInfo.rows[0].features = featureInfo.rows
+      return productInfo.rows[0];
     } catch(err) {
       console.log(' query failed', err)
       throw new Error('query failed')
@@ -28,11 +30,17 @@ module.exports = {
       await client.release();
       console.log('closed')
     }
-
   },
-  getProductStyles: async() => {null},
-  getRelatedProductsIds: async() => {null}
+  getProductStyles: async(id) => {null},
+  getRelatedProductsIds: async(id) => {null}
 }
 
+
+/*
+, features.feature, features.value
+
+JOIN features ON products.id = features.product_id
+
+*/
 
 
