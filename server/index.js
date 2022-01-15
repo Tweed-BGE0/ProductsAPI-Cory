@@ -13,9 +13,9 @@ app.use(express.json());
 //routes
 app.use('/products', productsRoutes);
 
-app.get('/', (req, res) => {
-  
-})
+// app.get('/', (req, res) => {
+
+// })
 
 app.listen(PORT, () => {
   console.log(`listening on port: ${PORT}`);

@@ -14,18 +14,35 @@ module.exports = {
       throw new Error("query failed");
     }
   },
-  getProductsPage: async ({ page, count }) => {
-    null;
+  getProductsPage: async (params) => {
+    console.log(params)
+    var page = params.page || 1;
+    var count = params.count || 5;
+    var startId = page == 1 ? 1 : count * page + 1;
+
+    const client = await pool.connect();
+    try {
+
+      const query = `
+      SELECT *
+      FROM products
+      WHERE id > $1
+      LIMIT $2`;
+
+      const { rows } = await client.query(query, [startId, count]);
+      return rows;
+    } catch (err) {
+      console.log(" query failed", err);
+      throw new Error("query failed");
+    } finally {
+      await client.release();
+      console.log("closed");
+    }
   },
   getProductById: async (id) => {
     const client = await pool.connect();
     try {
-      // const query = 'SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price FROM products WHERE products.id = $1;'
-      // const features = 'SELECT features.feature, features.value FROM features WHERE features.product_id = $1'
-      // const productInfo = await client.query(query, [id])
-      // const featureInfo = await client.query(features, [id])
-      // productInfo.rows[0].features = featureInfo.rows
-      // return productInfo.rows[0];
+
       const query = `
       SELECT p.id,
       p.name,
@@ -70,36 +87,54 @@ module.exports = {
     }
   },
   getProductStyles: async (id) => {
+    // const client = await pool.connect();
+    // try {
+    //   const query = "";
+    //   const photos = "";
+    //   const skus = "";
+    //   const results = ({ rows } = await client.query(query, [id]));
+
+    //   productInfo.rows[0].features = featureInfo.rows;
+    //   return productInfo.rows[0];
+    // } catch (err) {
+    //   console.log(" query failed", err);
+    //   throw new Error("query failed");
+    // } finally {
+    //   await client.release();
+    //   console.log("closed");
+    // }
+  },
+  getRelatedProductsIds: async (id) => {
     const client = await pool.connect();
     try {
-      const query = "";
-      const photos = "";
-      const skus = "";
-      const results = ({ rows } = await client.query(query, [id]));
 
-      productInfo.rows[0].features = featureInfo.rows;
-      return productInfo.rows[0];
+      const query = `
+      SELECT
+      ARRAY_AGG(related_product_id)
+      FROM related
+      WHERE current_product_id = $1`;
+
+      const { rows } = await client.query(query, [id]);
+      var result = rows[0].array_agg
+  
+      return result;
     } catch (err) {
       console.log(" query failed", err);
       throw new Error("query failed");
     } finally {
       await client.release();
       console.log("closed");
-    }
-  },
-  getRelatedProductsIds: async (id) => {
-    null;
-  },
+    };
+  }
 };
 
+
+
 /*
-, features.feature, features.value
-
-JOIN features ON products.id = features.product_id
-
-
-
-
-const query = 'SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price FROM products WHERE products.id = $1;'
-      const features = 'SELECT features.feature, features.value FROM features WHERE features.product_id = $1'
+// const query = 'SELECT products.id, products.name, products.slogan, products.description, products.category, products.default_price FROM products WHERE products.id = $1;'
+      // const features = 'SELECT features.feature, features.value FROM features WHERE features.product_id = $1'
+      // const productInfo = await client.query(query, [id])
+      // const featureInfo = await client.query(features, [id])
+      // productInfo.rows[0].features = featureInfo.rows
+      // return productInfo.rows[0];
 */
