@@ -1,5 +1,5 @@
 const pool = require("../database");
-
+const parse = require("../database/csvLineParse.js")
 //functions to interact and query with database
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
     var page = params.page || 1;
     var count = params.count || 5;
     var startId = page == 1 ? 1 : (count * page ) - count + 1 ;
-    
+
     const client = await pool.connect();
     try {
 
@@ -88,22 +88,58 @@ module.exports = {
     }
   },
   getProductStyles: async (id) => {
-    // const client = await pool.connect();
-    // try {
-    //   const query = "";
-    //   const photos = "";
-    //   const skus = "";
-    //   const results = ({ rows } = await client.query(query, [id]));
+    const client = await pool.connect();
+    try {
+      const query = `SELECT st.id, st.name, st.original_price, st.sale_price, st.default_style,
+      ARRAY_AGG(distinct (p.thumbnail_url, p.url)) AS photos,
+      ARRAY_AGG(distinct (sk.id, sk.size, sk.quantity)) AS skus
+      FROM styles st
+      LEFT JOIN photos p
+      ON st.id = p.style_id
+      LEFT JOIN skus sk
+      ON st.id = sk.style_id
+      WHERE st.product_id = $1
+      GROUP BY 1, 2, 3, 4, 5;`;
 
-    //   productInfo.rows[0].features = featureInfo.rows;
-    //   return productInfo.rows[0];
-    // } catch (err) {
-    //   console.log(" query failed", err);
-    //   throw new Error("query failed");
-    // } finally {
-    //   await client.release();
-    //   console.log("closed");
-    // }
+      const { rows } = await client.query(query, [id]);
+
+      var result = {
+        "product_id": id,
+        "results": rows.map((row, i) => {
+          var finalSku = {}
+          var parsed = parse(row.skus).map(sku => {
+            var split = sku.replace(/([()])/g, '').split(',');
+            return split;
+          }).forEach(arr => {
+            finalSku[arr[0]] = {
+              quantity: arr[2],
+              size: arr[1]
+          }
+          })
+
+          return {
+          "style_id": row.id,
+          "name": row.name,
+          "original_price": row.original_price,
+          "sale_price": row.sale_price,
+          "default?": row.default_style,
+          "photos": parse(row.photos).map((link, i) => {
+            var split = link.split(',')
+            return {thumbnail_url: split[0], url: split[1]}
+          }),
+          "skus" : finalSku
+          }
+      })
+    }
+
+      return result;
+    } catch (err) {
+      console.log(" query failed", err);
+      throw new Error("query failed");
+    } finally {
+      await client.release();
+      console.log("closed");
+    }
   },
   getRelatedProductsIds: async (id) => {
     const client = await pool.connect();
