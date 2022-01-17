@@ -73,3 +73,20 @@ ALTER TABLE skus ADD FOREIGN KEY (style_id) REFERENCES styles (id);
 ALTER TABLE photos ADD FOREIGN KEY (style_id) REFERENCES styles (id);
 
 
+CREATE INDEX idx_features_productid
+ON features(product_id) ;
+
+CREATE INDEX idx_photos_style_id
+ON photos(style_id) ;
+
+CREATE INDEX idx_related_related_product_id
+ON related(related_product_id) ;
+
+CREATE INDEX idx_skus_style_id
+ON skus(style_id) ;
+
+CREATE INDEX idx_related_current_product_id
+ON related(current_product_id) ;
+
+CREATE INDEX idx_styles_product_id
+ON styles(product_id) ;
