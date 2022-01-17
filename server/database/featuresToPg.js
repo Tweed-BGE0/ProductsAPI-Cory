@@ -41,8 +41,8 @@ async function processLineByLine(path, tableName, columnNames) {
     var value = split[3]
 
     counter++;
-    var temp = `(${id}, '${product_id}', '${feature}', '${value}'),`
-    if (split.length <= 4) {
+    var temp = `(${id}, '${product_id}', '${feature}', '${value}')`
+    if (split.length <= columnNames.length) {
       query += temp
     } else {
      console.log('PROBLEMO:', temp)
@@ -57,3 +57,25 @@ async function processLineByLine(path, tableName, columnNames) {
 }
 
 processLineByLine('/Users/coryzauss/Projects/sdc/Data/features.csv', 'features', ['id', 'product_id', 'feature', 'value']);
+
+
+/*
+  // var temp = `(`
+
+    // for (var i = 0; i < columnNames.length; i++) {
+    //   if (split[i] !== null){console.log( typeof split[i].replace(/'/g, ""))}
+    //   if (typeof split[i] !== 'number') {
+    //     temp += `'${split[i]}',`
+    //   } else {
+    //     temp += split[i] + ','
+    //   }
+    //   if ( i === columnNames.length -1) {
+    //     temp = temp.slice(0, temp.length-1);
+    //     temp += ')'
+    //   }
+
+    // }
+    // counter++
+    // console.log(temp)
+
+    */

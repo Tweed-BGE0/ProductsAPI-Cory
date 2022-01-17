@@ -76,8 +76,6 @@ module.exports = {
           };
         }),
       };
-
-      console.log(response)
       return response;
     } catch (err) {
       console.log(" query failed", err);
@@ -124,14 +122,16 @@ module.exports = {
           "sale_price": row.sale_price,
           "default?": row.default_style,
           "photos": parse(row.photos).map((link, i) => {
-            var split = link.split(',')
+            var link2 = link.replace(/[()]/g, '')
+            var split = link2.split(',')
+
             return {thumbnail_url: split[0], url: split[1]}
           }),
           "skus" : finalSku
           }
       })
     }
-
+console.log(result)
       return result;
     } catch (err) {
       console.log(" query failed", err);
