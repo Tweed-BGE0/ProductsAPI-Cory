@@ -1,0 +1,13 @@
+config:
+  target: "http://localhost:3000"
+  tls:
+    rejectUnauthorized: false
+  phases:
+    - duration: 60
+      arrivalRate: 1000
+      rampTo: 1000
+      maxVusers: 1000
+scenarios:
+  - flow:
+    - get:
+        url: "/api/products"

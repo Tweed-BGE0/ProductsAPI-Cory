@@ -4,6 +4,7 @@ const models = require('../models')
 
 module.exports = {
   getProductsPage: async(req, res) => {
+    
     try{
       const result = await models.getProductsPage(req.query)
       res.status(200).send(result)
