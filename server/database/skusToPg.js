@@ -56,7 +56,7 @@ async function processLineByLine(path, tableName, columnNames) {
 
 }
 
-processLineByLine('/Users/coryzauss/Projects/sdc/Data/skus.csv', 'skus', ['id', 'style_id', 'size', 'quantity']);
+processLineByLine('../../Data/skus.csv', 'skus', ['id', 'style_id', 'size', 'quantity']);
 
 
 

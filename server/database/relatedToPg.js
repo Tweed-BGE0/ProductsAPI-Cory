@@ -56,4 +56,4 @@ async function processLineByLine(path, tableName, columnNames) {
 
 }
 
-processLineByLine('/Users/coryzauss/Projects/sdc/Data/related.csv', 'related', ['id', 'current_product_id', 'related_product_id']);
+processLineByLine('../../Data/related.csv', 'related', ['id', 'current_product_id', 'related_product_id']);

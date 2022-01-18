@@ -6,7 +6,9 @@ const parse = require('./csvLineParse.js')
 
 
 
+
 async function processLineByLine(path, tableName, columnNames) {
+  console.log(path)
   const fileStream = fs.createReadStream(`${path}`);
 
   const rl = readline.createInterface({
@@ -56,7 +58,7 @@ async function processLineByLine(path, tableName, columnNames) {
 
 }
 
-processLineByLine('/Users/coryzauss/Projects/sdc/Data/features.csv', 'features', ['id', 'product_id', 'feature', 'value']);
+processLineByLine('../../Data/features.csv', 'features', ['id', 'product_id', 'feature', 'value']);
 
 
 /*

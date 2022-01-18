@@ -57,5 +57,5 @@ async function processLineByLine(path, tableName, columnNames) {
 
 }
 
-processLineByLine('/Users/coryzauss/Projects/sdc/Data/styles.csv', 'styles', ['id', 'product_id', 'name', 'sale_price', 'original_price','default_style']);
+processLineByLine('../../Data/styles.csv', 'styles', ['id', 'product_id', 'name', 'sale_price', 'original_price','default_style']);
 

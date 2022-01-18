@@ -21,7 +21,7 @@ const parse = require('./csvLineParse.js');
 // })
 
 async function processLineByLine() {
-  const fileStream = fs.createReadStream('/Users/coryzauss/Projects/sdc/Data/products.csv', 'utf8');
+  const fileStream = fs.createReadStream('../../Data/products.csv', 'utf8');
 
   const rl = readline.createInterface({
     input: fileStream,
