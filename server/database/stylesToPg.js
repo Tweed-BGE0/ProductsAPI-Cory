@@ -41,6 +41,7 @@ async function processLineByLine(path, tableName, columnNames) {
     var sale_price = split[3].replace(/'/g,'')
     var original_price = split[4]
     var default_style = split[5]
+    
     counter++;
     var temp = `(${id}, '${product_id}', '${name}', ${sale_price}, '${original_price}', '${default_style}'),`
     if (split.length <= 6) {
@@ -54,7 +55,6 @@ async function processLineByLine(path, tableName, columnNames) {
     db.connectAndQuery(query);
     console.log('last BATCHED style')
   }
-
 }
 
 processLineByLine('../../Data/styles.csv', 'styles', ['id', 'product_id', 'name', 'sale_price', 'original_price','default_style']);
