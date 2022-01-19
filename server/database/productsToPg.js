@@ -1,24 +1,8 @@
 const fs = require('fs');
 const readline = require('readline');
-const pool = require('./index.js');
-const parse = require('./csvLineParse.js');
-
-//scan thru && identify errors or correct errors/inconsistant data
-// run data thru schemas and store in database
-//  var read = lineReader.createInterface({
-//   input: fs.createReadStream('/Users/coryzauss/Projects/sdc/Data/products.csv', 'utf8')
-// })
-
-// read.on('line', async (line) => {
-//   let split = line.split(',')
-//   console.log(split)
-//    const client = await pool.connect()
-//    await client.query(`INSERT INTO products VALUES(?,?,?,?,?,?)`, [split[0], split[1], split[2], split[3], split[4], split[5]])
-//    await client.release();
-//    console.log('released')
-
-//   // streams one complete line at a time from the csv files
-// })
+const pool = require('./index.js')
+const db = require('../models')
+const parse = require('./csvLineParse.js')
 
 async function processLineByLine() {
   const fileStream = fs.createReadStream('../../Data/products.csv', 'utf8');
@@ -27,8 +11,7 @@ async function processLineByLine() {
     input: fileStream,
     crlfDelay: Infinity
   });
-  // Note: we use the crlfDelay option to recognize all instances of CR LF
-  // ('\r\n') in input.txt as a single line break.
+
   var readHeader = false
   var counter = 0;
   var query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';
@@ -42,7 +25,6 @@ async function processLineByLine() {
 
     if (counter >= 65000) {
       query = query.slice( 0, query.length -1)
-     // console.log('QUERY', query)
       try{
         const client = await pool.connect()
         await client.query(query)

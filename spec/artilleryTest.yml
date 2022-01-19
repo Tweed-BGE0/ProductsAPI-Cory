@@ -4,10 +4,10 @@ config:
     rejectUnauthorized: false
   phases:
     - duration: 60
-      arrivalRate: 1000
+      arrivalRate: 100
       rampTo: 1000
       maxVusers: 1000
 scenarios:
   - flow:
     - get:
-        url: "/api/products"
+        url: "/api/products/?page=66&count=200"
