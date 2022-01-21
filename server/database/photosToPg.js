@@ -5,6 +5,7 @@ const db = require('../models')
 const parse = require('./csvLineParse.js')
 
 async function processLineByLine(path, tableName, columnNames) {
+
   const fileStream = fs.createReadStream(`${path}`);
 
   const rl = readline.createInterface({
@@ -15,7 +16,7 @@ async function processLineByLine(path, tableName, columnNames) {
   var readHeader = false
   var counter = 0;
   var query = `INSERT INTO ${tableName}(${columnNames.join(',')}) VALUES `;
-  console.log(query)
+
 
   for await (const line of rl) {
     if (!readHeader) {
@@ -25,7 +26,7 @@ async function processLineByLine(path, tableName, columnNames) {
 
     if (counter >= 65000) {
       query = query.slice( 0, query.length -1)
-      db.connectAndQuery(query)
+      await db.connectAndQuery(query)
       query = `INSERT INTO ${tableName}(${columnNames.join(',')}) VALUES `;
       counter = 0;
       console.log('BATCHED photos')
@@ -50,7 +51,8 @@ async function processLineByLine(path, tableName, columnNames) {
   }
   if (counter !==0) {
     query = query.slice( 0, query.length -1)
-    db.connectAndQuery(query);
+    await db.connectAndQuery(query);
+    counter = 0;
     console.log('last BATCHED photos')
   }
 

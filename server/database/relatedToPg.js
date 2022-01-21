@@ -17,7 +17,6 @@ async function processLineByLine(path, tableName, columnNames) {
   var readHeader = false
   var counter = 0;
   var query = `INSERT INTO ${tableName}(${columnNames.join(',')}) VALUES `;
-  console.log(query)
 
   for await (const line of rl) {
     if (!readHeader) {
@@ -27,7 +26,7 @@ async function processLineByLine(path, tableName, columnNames) {
 
     if (counter >= 65000) {
       query = query.slice( 0, query.length -1)
-      db.connectAndQuery(query)
+      await db.connectAndQuery(query)
       query = `INSERT INTO ${tableName}(${columnNames.join(',')}) VALUES `;
       counter = 0;
       console.log('BATCHED related')
@@ -40,7 +39,7 @@ async function processLineByLine(path, tableName, columnNames) {
     var related_product_id = split[2]
 
     counter++;
-    var temp = `(${id}, '${current_product_id}', '${related_product_id}'),`
+    var temp = `(${id}, ${current_product_id}, ${related_product_id}),`
 
     if (split.length <= 3 && related_product_id !== '0') {
       query += temp
@@ -48,9 +47,10 @@ async function processLineByLine(path, tableName, columnNames) {
      console.log('PROBLEMO:', temp)
     }
   }
-  if (counter !==0) {
+  if (counter !== 0) {
     query = query.slice( 0, query.length -1)
-    db.connectAndQuery(query);
+    await db.connectAndQuery(query);
+    counter = 0;
     console.log('last BATCHED related')
   }
 

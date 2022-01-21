@@ -1,6 +1,8 @@
 Drop DATABASE IF EXISTS products;
 CREATE DATABASE products;
 
+\c products
+
 DROP TABLE products CASCADE;
 
 CREATE TABLE products (
@@ -49,7 +51,7 @@ CREATE TABLE skus (
   id serial ,
   style_id INT,
   size VARCHAR,
-  quantity INT,
+  quantity SMALLINT,
   PRIMARY KEY(id)
 );
 
@@ -90,3 +92,4 @@ ON related(current_product_id) ;
 
 CREATE INDEX idx_styles_product_id
 ON styles(product_id) ;
+

@@ -29,7 +29,7 @@ async function processLineByLine(path, tableName, columnNames) {
 
     if (counter >= 65000) {
       query = query.slice( 0, query.length -1)
-      db.connectAndQuery(query)
+      await db.connectAndQuery(query)
       query = `INSERT INTO ${tableName}(${columnNames.join(',')}) VALUES `;
       counter = 0;
       console.log('BATCHED features')
@@ -43,7 +43,7 @@ async function processLineByLine(path, tableName, columnNames) {
     var value = split[3]
 
     counter++;
-    var temp = `(${id}, '${product_id}', '${feature}', '${value}')`
+    var temp = `(${id}, '${product_id}', '${feature}', '${value}'),`
     if (split.length <= columnNames.length) {
       query += temp
     } else {
@@ -52,7 +52,8 @@ async function processLineByLine(path, tableName, columnNames) {
   }
   if (counter !==0) {
     query = query.slice( 0, query.length -1)
-    db.connectAndQuery(query);
+    await db.connectAndQuery(query);
+    counter = 0;
     console.log('last BATCHED features')
   }
 

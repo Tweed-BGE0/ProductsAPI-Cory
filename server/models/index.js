@@ -5,13 +5,17 @@ const parse = require("../database/csvLineParse.js")
 module.exports = {
   // connectAndQuery is used to load of database - imported in ToPg files
   connectAndQuery: async (query) => {
+    const client = await pool.connect();
+    console.log(':::::::CONNECTED:::::::')
     try {
-      const client = await pool.connect();
+      console.log(query.slice(0, 130), '...')
       await client.query(query);
-      await client.release();
     } catch (err) {
       console.log(" query failed", err);
       throw new Error("query failed");
+    } finally {
+      await client.release();
+      console.log(":::::::RELEASED:::::::");
     }
   },
   getProductsPage: async (params) => {

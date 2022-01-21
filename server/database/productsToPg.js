@@ -5,6 +5,7 @@ const db = require('../models')
 const parse = require('./csvLineParse.js')
 
 async function processLineByLine() {
+  console.log('START')
   const fileStream = fs.createReadStream('../../Data/products.csv', 'utf8');
 
   const rl = readline.createInterface({
@@ -17,6 +18,7 @@ async function processLineByLine() {
   var query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';
 
   for await (const line of rl) {
+
     // Each line in input.txt will be successively available here as line.
     if (!readHeader) {
       readHeader = true;
@@ -24,17 +26,19 @@ async function processLineByLine() {
     }
 
     if (counter >= 65000) {
+      console.log('LOOP', query.slice(0, 300))
       query = query.slice( 0, query.length -1)
       try{
         const client = await pool.connect()
+        console.log('connected')
         await client.query(query)
         await client.release();
         console.log('Batched products')
       } catch(err) {
-        console.log(' q failed', err, query)
+        console.log('query failed', err)
         throw new Error('failure')
       }
-      query = 'INSERT INTO products(id, name, slogan, description, category, default_price) VALUES ';
+      query = 'INSERT INTO products (id, name, slogan, description, category, default_price) VALUES ';
       counter = 0;
     }
     let l = line
