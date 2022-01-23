@@ -4,7 +4,7 @@ const models = require('../models')
 
 module.exports = {
   getProductsPage: async(req, res) => {
-    
+    console.log(req)
     try{
       const result = await models.getProductsPage(req.query)
       res.status(200).send(result)
@@ -35,5 +35,9 @@ module.exports = {
     } catch (err) {
       res.status(400).send(err)
     }
+  },
+  verifyLoader: async(req, res) => {
+    var key = 'loaderio-7e635ee72bbb8fad0b1b5d979bbdb159'
+    res.send(key)
   }
 }
